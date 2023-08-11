@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SignOut from "./Signout";
-import { db } from "../firebase.jsx";
+import SendMessage from "./SendMessage";
+import { db, auth } from "../firebase.jsx";
 
 function Line() {
   const [messages, setMessages] = useState([]);
@@ -19,7 +20,12 @@ function Line() {
       <div className="msgs">
         {messages.map(({ id, text, photoURL, uid }) => (
           <div>
-            <div key={id}>
+            <div
+              key={id}
+              className={`msg ${
+                uid === auth.currentUser.uid ? "sent" : "received"
+              }`}
+            >
               <img src={photoURL} alt="" />
               <p>{text}</p>
             </div>
@@ -33,6 +39,7 @@ function Line() {
           //ただし、mapの中で一行で完結する場合は、丸括弧なしで書くこともできます
         ))}
       </div>
+      <SendMessage />
     </div>
   );
 }
